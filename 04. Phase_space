@@ -1,0 +1,34 @@
+from scipy.integrate import solve_ivp
+import matplotlib.pyplot as plt
+import numpy as np
+import math
+
+# import main
+
+A, B = 1, 3
+w = 0.6
+e = 0
+
+
+def brusselator(t, z):
+    x, y = z
+    return [A + x * x * y - (B + 1) * x + e * math.cos(w * t), B * x - x * x * y]
+
+
+a, b = 0, 50
+t = np.linspace(a, b, 1000)
+
+
+for i in range(0, 20):
+    e = i / 5
+    for x0 in range(0, 6):
+        for y0 in [0, 3]:
+            sol = solve_ivp(brusselator, [a, b], [x0, y0])
+            plt.plot(sol.y[0], sol.y[1], ":", color="blue")
+            plt.xlabel('[X]')
+            plt.ylabel('[Y]')
+    file_name = list("fig_i")
+    file_name[4] = str(i)
+    plt.title(e)
+    plt.savefig("".join(file_name))
+    plt.clf()
